@@ -1,19 +1,25 @@
 'use strict'
 
-const todoControl = document.querySelector('.todo-control'),
-headerinput = document.querySelector('.header-input'),
-todoList = document.querySelector('.todo-list'),
-todoCompleted = document.querySelector('.todo-completed');
+const todoControl = document.querySelector('.todo-control'),//форма
+headerInput = document.querySelector('.header-input'),
+todoList = document.querySelector('.todo-list'),//список задач
+todoCompleted = document.querySelector('.todo-completed'),// выполненные задачи
+headerBtn = document.querySelector('.header-button');
 
-const todoData = [
-   
-   
-];
+let clearLocalStorage = function() {
+   if (confirm('Желаете очистить localStorage?')) {
+      localStorage.clear();
+   }
+};
+
+clearLocalStorage();
+
+const todoData = JSON.parse(localStorage.getItem('toDo')) || [];;
 
 const render = function() {
    todoList.textContent = '';
    todoCompleted.textContent = '';
-   todoData.forEach(item => {
+   todoData.forEach((item, index) => {
       const li = document.createElement('li');
       li.classList.add('todo-item');
       li.innerHTML = '<span class="text-todo">' + item.value + '</span>' + 
@@ -32,11 +38,16 @@ const render = function() {
 
       btnTodoComplete.addEventListener('click', function() {
          item.completed = !item.completed;
+         console.log(todoData);
          render();
-      })
-      const todoRemove = document.querySelector('.todo-remove');
+      });
+
+      const todoRemove = li.getElementsByClassName('todo-remove')[0];
+      console.log(todoRemove);
       todoRemove.addEventListener('click', function() {
-         li.remove();
+         // li.remove();
+         todoData.splice(index, 1);
+         console.log(todoData);
          render();
          
       })
@@ -44,18 +55,41 @@ const render = function() {
 
 };
 
+/* headerInput.addEventListener('input', (event) => {
+   if (event.data === null) {
+      headerBtn.setAttribute('disabled', 'disabled');
+   } else {
+      headerBtn.removeAttribute('disabled');
+   }
+   console.log(event);
+}); */
+headerInput.addEventListener('input', () => {
+   if (headerInput.value === '') {
+      headerBtn.setAttribute('disabled', 'disabled');
+   } else {
+      headerBtn.removeAttribute('disabled');
+   }
+   console.log(headerInput.value);
+});
+
 todoControl.addEventListener('submit', function(event) {
    event.preventDefault();
 
    const newTodo = {
-      value: headerinput.value,
+      value: headerInput.value,
       completed: false,
    };
 
    todoData.push(newTodo);
+   headerInput.value = null;
 
    render();
 });
+
+let count = 1;
+headerBtn.addEventListener('click', () => {
+   localStorage.setItem(`toDo`, `${JSON.stringify(todoData)}`);
+})
 
 render();
 
