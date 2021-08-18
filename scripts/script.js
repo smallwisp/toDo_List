@@ -48,9 +48,9 @@ const render = function() {
       console.log(todoRemove);
       todoRemove.addEventListener('click', function() {
          todoData.splice(index, 1);
+         localStorage.setItem(`toDo`, `${JSON.stringify(todoData)}`);
          console.log(todoData);
          render();
-         
       })
    })
 
