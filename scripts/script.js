@@ -5,6 +5,7 @@ headerInput = document.querySelector('.header-input'),
 todoList = document.querySelector('.todo-list'),//список задач
 todoCompleted = document.querySelector('.todo-completed'),// выполненные задачи
 headerBtn = document.querySelector('.header-button');
+const todoRemove = document.getElementsByClassName('todo-remove')[0];
 
 let clearLocalStorage = function() {
    if (confirm('Желаете очистить localStorage?')) {
@@ -14,7 +15,7 @@ let clearLocalStorage = function() {
 
 clearLocalStorage();
 
-const todoData = JSON.parse(localStorage.getItem('toDo')) || [];;
+const todoData = JSON.parse(localStorage.getItem('toDo')) || [];
 
 const render = function() {
    todoList.textContent = '';
@@ -38,6 +39,7 @@ const render = function() {
 
       btnTodoComplete.addEventListener('click', function() {
          item.completed = !item.completed;
+         localStorage.setItem(`toDo`, `${JSON.stringify(todoData)}`);
          console.log(todoData);
          render();
       });
@@ -45,7 +47,6 @@ const render = function() {
       const todoRemove = li.getElementsByClassName('todo-remove')[0];
       console.log(todoRemove);
       todoRemove.addEventListener('click', function() {
-         // li.remove();
          todoData.splice(index, 1);
          console.log(todoData);
          render();
@@ -55,14 +56,6 @@ const render = function() {
 
 };
 
-/* headerInput.addEventListener('input', (event) => {
-   if (event.data === null) {
-      headerBtn.setAttribute('disabled', 'disabled');
-   } else {
-      headerBtn.removeAttribute('disabled');
-   }
-   console.log(event);
-}); */
 headerInput.addEventListener('input', () => {
    if (headerInput.value === '') {
       headerBtn.setAttribute('disabled', 'disabled');
@@ -86,10 +79,15 @@ todoControl.addEventListener('submit', function(event) {
    render();
 });
 
-let count = 1;
 headerBtn.addEventListener('click', () => {
    localStorage.setItem(`toDo`, `${JSON.stringify(todoData)}`);
-})
+});
+
+if (todoRemove) {
+   todoRemove.addEventListener('click', () => {
+      localStorage.setItem(`toDo`, `${JSON.stringify(todoData)}`);
+   });
+}
 
 render();
 
