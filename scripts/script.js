@@ -1,4 +1,4 @@
-console.log(10);
+
 class Todo {
     constructor(form, input, todoContainer, todoList, todoCompleted) {
         this.form = document.querySelector(form);
